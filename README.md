@@ -8,7 +8,6 @@ This repository contains comprehensive unit tests for the `processor.rs` module 
 - [Why Solana-Bankrun is a Better Testing Framework](#why-solana-bankrun-is-a-better-testing-framework)
 - [Challenges and Limitations](#challenges-and-limitations)
 - [Unit Test Execution Instructions](#unit-test-execution-instructions)
-- [Potential Mocking Limitations](#potential-mocking-limitations)
 - [Conclusion](#conclusion)
 
 ---
@@ -114,3 +113,8 @@ Make sure you have the following dependencies installed:
 - **Library File:** `./program_client/lib/bankrun_rpc.ts`
 - **Shared Object File:** `validate_basic_nft.so`  
   (Located in the root directory. If not found, build the project and copy it from `target/`.)
+
+
+## **Conclusion**
+Using bankrun and vitest prove to be a highly efficient and fast method for testing solana smart contracts built with the Codigo tool.
+Any further challenges or limitations will be highlited along the line.
