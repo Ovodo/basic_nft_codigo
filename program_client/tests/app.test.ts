@@ -12,6 +12,8 @@ import { it, expect, describe } from "vitest";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
 describe("Testing process.rs module", async () => {
+  // Initialize the client and Program
+
   const programId = PublicKey.unique();
   const context = await start([{ name: "validate_basic_nft", programId }], []);
   initializeProgram(programId);
@@ -20,11 +22,13 @@ describe("Testing process.rs module", async () => {
   const blockhash = context.lastBlockhash;
 
   // Setup: Create wallets for John and Jane Doe
+
   const johnDoeWallet = Keypair.generate();
   const janeDoeWallet = Keypair.generate();
   const mint = Keypair.generate();
 
-  // Derive PDAs for both wallets
+  // Derive PDAs for both wallets and for gemMetadata
+
   const [johnDoeATA] = CslSplTokenPDAs.deriveAccountPDA(
     {
       wallet: johnDoeWallet.publicKey,
@@ -44,6 +48,8 @@ describe("Testing process.rs module", async () => {
   );
 
   const [gemPub] = deriveMetadataPDA({ mint: mint.publicKey }, programId);
+
+  // Start testing several Edge Cases
 
   it("should mint an NFT successfully", async () => {
     const transaction = new Transaction().add(
@@ -209,22 +215,6 @@ describe("Testing process.rs module", async () => {
     // Check if the NFT has been burned
     const gem = await getGemData(gemPub, client);
     expect(gem?.assocAccount).toBeUndefined();
-
-    // // Edge case: Burn with invalid wallet
-    // await expect(
-    //   client.processTransaction(
-    //     new Transaction()
-    //       .add(
-    //         burn({
-    //           feePayer: feePayer.publicKey,
-    //           mint: mint.publicKey,
-    //           owner: new PublicKey(PublicKey.unique()),
-    //           wallet: janeDoeWallet.publicKey,
-    //         })
-    //       )
-    //       .sign(feePayer, janeDoeWallet)
-    //   )
-    // ).rejects.toThrow();
   });
 
   it("should fail to transfer burnt nft", async () => {
